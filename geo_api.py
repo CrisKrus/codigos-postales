@@ -1,14 +1,18 @@
 import requests
 
 ID_PROVINCIA = 'CPRO'
-ID_LAS_PALMAS = 35
-CODIGO_POSTAL = 'CPOS'
+NOMBRE_PROVINCIA = 'PRO'
+
 ID_MUNICIPIO = 'CMUM'
 NOMBRE_MUNICIPIO = 'DMUN50'
+
 ID_POBLACION = 'CUN'
 NOMBRE_POBLACION = 'NENTSI50'
+
 ID_NUCLEO = 'CUN'
 NOMBRE_NUCLEO = 'NNUCLE50'
+
+CODIGO_POSTAL = 'CPOS'
 
 
 class geo_api:
@@ -63,8 +67,8 @@ class geo_api:
         provincias = []
         for provincia in res:
             provincias.append({
-                'id': provincia['CPRO'],
-                'name': provincia['PRO']
+                'id': provincia[ID_PROVINCIA],
+                'name': provincia[NOMBRE_PROVINCIA]
             })
         return provincias
 
