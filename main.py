@@ -2,24 +2,24 @@ from sys import argv
 from geo_api import geo_api
 
 
-def write_all_postal_codes(infrastructure, province_id, province_name, output):
-    municipios = infrastructure.get_municipios(province_id)
+def write_all_postal_codes(infrastructura, id_provincia, nombre_provincia, output):
+    municipios = infrastructura.get_municipios(id_provincia)
 
     for municipio in municipios:
         print(f"-> {municipio['name']}")
-        poblaciones = infrastructure.get_poblacion(province_id, municipio['id'])
+        poblaciones = infrastructura.get_poblacion(id_provincia, municipio['id'])
 
         for poblacion in poblaciones:
             print(f"\t-> {poblacion['name']}")
-            nucleos = infrastructure.get_nucleo(province_id, municipio['id'], poblacion['name'])
+            nucleos = infrastructura.get_nucleo(id_provincia, municipio['id'], poblacion['name'])
 
             for nucleo in nucleos:
                 print(f"\t\t-> {nucleo['name']}")
-                codigos_postales = infrastructure.get_codigo_postal(province_id, municipio['id'], nucleo['id'])
+                codigos_postales = infrastructura.get_codigo_postal(id_provincia, municipio['id'], nucleo['id'])
 
                 for codigo_postal in codigos_postales:
                     output.write(
-                        f"{province_name}; {municipio['name']}; {poblacion['name']}; {nucleo['name']}; {codigo_postal};\n"
+                        f"{nombre_provincia}; {municipio['name']}; {poblacion['name']}; {nucleo['name']}; {codigo_postal};\n"
                     )
 
 
@@ -28,9 +28,9 @@ file = None
 
 try:
     geo = geo_api(key)
-    province_name = geo.get_nombre_provincia(id_provincia)
-    file = open(f'codigos_postales/{province_name}.csv', 'w')
+    nombre_provincia = geo.get_nombre_provincia(id_provincia)
+    file = open(f'codigos_postales/{nombre_provincia}.csv', 'w')
     file.write('Provincia; Municipio; Poblacion; Nucleo; Codigo postal;\n')
-    write_all_postal_codes(geo, id_provincia, province_name, file)
+    write_all_postal_codes(geo, id_provincia, nombre_provincia, file)
 finally:
     file.close()
