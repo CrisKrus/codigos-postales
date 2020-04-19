@@ -23,3 +23,4 @@ Todo list
 - [ ] Poner lista de provincias en el README
 - [ ] Generalizar mas a comunidades (?)
 - [ ] Dockerfile
+- [ ] Añadir modulo que separe por islas
