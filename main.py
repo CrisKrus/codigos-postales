@@ -3,28 +3,31 @@ from geo_api import geo_api
 
 script, key, id_provincia = argv
 
-geo = geo_api(key)
+
+def write_all_postal_codes(province_id, output):
+    geo = geo_api(key)
+    municipios = geo.get_municipios(province_id)
+
+    for municipio in municipios:
+        print(f"-> {municipio['name']}")
+        poblaciones = geo.get_poblacion(province_id, municipio['id'])
+
+        for poblacion in poblaciones:
+            print(f"\t-> {poblacion['name']}")
+            nucleos = geo.get_nucleo(province_id, municipio['id'], poblacion['name'])
+
+            for nucleo in nucleos:
+                print(f"\t\t-> {nucleo['name']}")
+                codigos_postales = geo.get_codigo_postal(province_id, municipio['id'], nucleo['id'])
+
+                for codigo_postal in codigos_postales:
+                    output.write(f"Las Palmas; {municipio['name']}; {poblacion['name']}; {nucleo['name']}; {codigo_postal};\n")
+
 
 file = open('codigos_postales/las_palmas.csv', 'w')
 
 try:
     file.write('Provincia; Municipio; Poblacion; Nucleo; Codigo postal;\n')
-    municipios = geo.get_municipios(id_provincia)
-
-    for municipio in municipios:
-        print(f"-> {municipio['name']}")
-        poblaciones = geo.get_poblacion(id_provincia, municipio['id'])
-
-        for poblacion in poblaciones:
-            print(f"\t-> {poblacion['name']}")
-            nucleos = geo.get_nucleo(id_provincia, municipio['id'], poblacion['name'])
-
-            for nucleo in nucleos:
-                print(f"\t\t-> {nucleo['name']}")
-                codigos_postales = geo.get_codigo_postal(id_provincia, municipio['id'], nucleo['id'])
-
-                for codigo_postal in codigos_postales:
-                    file.write(
-                        f"Las Palmas; {municipio['name']}; {poblacion['name']}; {nucleo['name']}; {codigo_postal};\n")
+    write_all_postal_codes(id_provincia, file)
 finally:
     file.close()
