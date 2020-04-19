@@ -55,7 +55,7 @@ class geo_api:
             codigos_postales.append(codigo_postal[CODIGO_POSTAL])
         return codigos_postales
 
-    def get_provincias(self, ):
+    def get_provincias(self):
         url = f"https://apiv1.geoapi.es/provincias?&type=JSON&key={self.KEY}"
         res = requests.get(url)
         res = res.json()['data']
@@ -67,3 +67,26 @@ class geo_api:
                 'name': provincia['PRO']
             })
         return provincias
+
+    def chek_province(self, id_provincia):
+        provincias = self.get_provincias()
+
+        contained = False
+        for provincia in provincias:
+            if provincia['id'] == id_provincia:
+                contained = True
+
+        if not contained:
+            print('Codigo de provincia no valido')
+            print('Provincias:')
+            for provincia in provincias:
+                print(provincia)
+            exit(-1)
+
+    def get_nombre_provincia(self, id_provincia):
+        self.chek_province(id_provincia)
+
+        provincias = self.get_provincias()
+        for provincia in provincias:
+            if id_provincia == provincia['id']:
+                return provincia['name']

@@ -2,7 +2,7 @@ from sys import argv
 from geo_api import geo_api
 
 
-def write_all_postal_codes(province_id, output):
+def write_all_postal_codes(province_id, province_name, output):
     geo = geo_api(key)
     municipios = geo.get_municipios(province_id)
 
@@ -20,34 +20,18 @@ def write_all_postal_codes(province_id, output):
 
                 for codigo_postal in codigos_postales:
                     output.write(
-                        f"Las Palmas; {municipio['name']}; {poblacion['name']}; {nucleo['name']}; {codigo_postal};\n")
-
-
-def chek(id_provincia):
-    geo = geo_api(key)
-    provincias = geo.get_provincias()
-
-    contained = False
-    for provincia in provincias:
-        if provincia['id'] == id_provincia:
-            contained = True
-
-    if not contained:
-        print('Codigo de provincia no valido')
-        print('Provincias:')
-        for provincia in provincias:
-            print(provincia)
-        exit(-1)
+                        f"{province_name}; {municipio['name']}; {poblacion['name']}; {nucleo['name']}; {codigo_postal};\n"
+                    )
 
 
 script, key, id_provincia = argv
-
-chek(id_provincia)
-
-file = open('codigos_postales/las_palmas.csv', 'w')
+file = None
 
 try:
+    geo = geo_api(key)
+    province_name = geo.get_nombre_provincia(id_provincia)
+    file = open(f'codigos_postales/{province_name}.csv', 'w')
     file.write('Provincia; Municipio; Poblacion; Nucleo; Codigo postal;\n')
-    write_all_postal_codes(id_provincia, file)
+    write_all_postal_codes(id_provincia, province_name, file)
 finally:
     file.close()
