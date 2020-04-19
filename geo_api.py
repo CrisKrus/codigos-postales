@@ -54,3 +54,16 @@ class geo_api:
         for codigo_postal in res:
             codigos_postales.append(codigo_postal[CODIGO_POSTAL])
         return codigos_postales
+
+    def get_provincias(self, ):
+        url = f"https://apiv1.geoapi.es/provincias?&type=JSON&key={self.KEY}"
+        res = requests.get(url)
+        res = res.json()['data']
+
+        provincias = []
+        for provincia in res:
+            provincias.append({
+                'id': provincia['CPRO'],
+                'name': provincia['PRO']
+            })
+        return provincias
