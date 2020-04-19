@@ -1,20 +1,30 @@
 from sys import argv
-
-from geo_api import ID_LAS_PALMAS, get_municipios, get_poblacion, get_nucleo, get_codigo_postal
+from geo_api import geo_api
 
 script, key, id_provincia = argv
 
-with open('codigos_postales/las_palmas.csv', 'a') as file:
+geo = geo_api(key)
+
+file = open('codigos_postales/las_palmas.csv', 'w')
+
+try:
     file.write('Provincia; Municipio; Poblacion; Nucleo; Codigo postal;\n')
-    municipios = get_municipios(ID_LAS_PALMAS)
+    municipios = geo.get_municipios(id_provincia)
+
     for municipio in municipios:
-        print('--> ', municipio['name'])
-        poblaciones = get_poblacion(ID_LAS_PALMAS, municipio['id'])
+        print(f"-> {municipio['name']}")
+        poblaciones = geo.get_poblacion(id_provincia, municipio['id'])
+
         for poblacion in poblaciones:
-            print('----> ', poblacion['name'])
-            nucleos = get_nucleo(ID_LAS_PALMAS, municipio['id'], poblacion['name'])
+            print(f"\t-> {poblacion['name']}")
+            nucleos = geo.get_nucleo(id_provincia, municipio['id'], poblacion['name'])
+
             for nucleo in nucleos:
-                codigos_postales = get_codigo_postal(ID_LAS_PALMAS, municipio['id'], nucleo['id'])
+                print(f"\t\t-> {nucleo['name']}")
+                codigos_postales = geo.get_codigo_postal(id_provincia, municipio['id'], nucleo['id'])
+
                 for codigo_postal in codigos_postales:
-                        file.write(f"Las Palmas; {municipio['name']}; {poblacion['name']}; {nucleo['name']}; {codigo_postal};\n")
+                    file.write(
+                        f"Las Palmas; {municipio['name']}; {poblacion['name']}; {nucleo['name']}; {codigo_postal};\n")
+finally:
     file.close()
