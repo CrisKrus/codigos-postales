@@ -22,3 +22,4 @@ Todo list
 
 - [ ] Poner lista de provincias en el README
 - [ ] Generalizar mas a comunidades (?)
+- [ ] Dockerfile
