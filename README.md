@@ -24,3 +24,4 @@ Todo list
 - [ ] Generalizar mas a comunidades (?)
 - [ ] Dockerfile
 - [ ] Añadir modulo que separe por islas
+- [ ] Problemas de encoding
